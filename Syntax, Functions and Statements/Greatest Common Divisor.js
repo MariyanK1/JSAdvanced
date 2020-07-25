@@ -1,3 +1,11 @@
+/*
+
+Write a function that takes two positive numbers as input and compute the greatest common divisor.	
+The input comes as two positive integer numbers.
+The output should be printed on the console.
+
+*/
+
 function GCD(num1, num2) {
 
     let oldDivisor = 1;
