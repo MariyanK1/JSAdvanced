@@ -1,21 +1,11 @@
-const colorMap = ["#5B88BD", "#8FF897", "#A40014"];
-let state = 0;
-
 function growingWord() {
-    const word = document.getElementsByTagName('p')[2];
+    const colors = ['blue', 'green', 'red'];
 
-    if (word === 'null') {
-        throw new Error("No words for you!");
-    };
+    const paragraph = document.getElementsByTagName('p')[2];
 
-    let fontSize = window.getComputedStyle(word).fontSize.replace("px", "");
+    let color = paragraph.style.color;
+    paragraph.style.color = !color ? 'blue' : colors[(colors.indexOf(color) + 1) % colors.length];
 
-    if (state >= colorMap.length) {
-        state = 0;
-    }
-
-    word.style.color = colorMap[state];
-    state++;
-
-    word.style.fontSize = (fontSize === "0" ? "2" : fontSize * 2) + "px";
+    let fontSize = paragraph.style.fontSize.replace('px', '');
+    paragraph.style.fontSize = (!fontSize ? '2' : fontSize * 2) + 'px';
 }
