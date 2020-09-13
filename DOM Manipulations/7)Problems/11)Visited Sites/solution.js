@@ -1,5 +1,6 @@
 function solve() {
-  let sites = document.querySelectorAll('.link-1');
+  let sites = document.getElementsByClassName('link-1');
+  
   Array.from(sites).forEach(site => {
     site.addEventListener(`click`, (ev) => {
       let paragraph = site.querySelector('p');
