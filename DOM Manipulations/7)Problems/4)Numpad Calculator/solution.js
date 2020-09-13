@@ -1,45 +1,47 @@
 function solve() {
-    let pad = document.getElementsByClassName('keys')[0];
-    let output = document.getElementById('expressionOutput');
-    let clearButton = document.getElementsByClassName('clear')[0];
+    const keys = Array.from(document.getElementsByClassName('keys'));
+    const expressionOutput = document.getElementById('expressionOutput');
+    const result = document.getElementById('resultOutput');
+    const clearButton = document.querySelector('.clear');
+    let operand;
+    let firstNumber = '';
+    let secondNumber = '';
 
-    let operators = ['+', '-', '/', '*'];
-
-    let operations = {
-        '+': (num, num2) => Number(num) + Number(num2),
-        '-': (num, num2) => Number(num) - Number(num2),
-        '/': (num, num2) => Number(num) / Number(num2),
-        '*': (num, num2) => Number(num) * Number(num2),
+    const calculator = {
+        '+': (a, b) => a + b,
+        '-': (a, b) => a - b,
+        '*': (a, b) => a * b,
+        '/': (a, b) => a / b
     }
 
-    clearButton.addEventListener('click', () => {
-        output.innerHTML = "";
-        result.innerHTML = "";
-    });
+    keys.map(key => key.addEventListener('click', function (evt) {
+        const currentSelection = evt.target.value;
 
-    pad.addEventListener('click', ({ target: { value } }) => {
+        clearButton.addEventListener('click', () => {
+            expressionOutput.textContent = '';
+            result.textContent = '';
+            firstNumber = '';
+            secondNumber = '';
+            operand = '';
+        })
 
-        if (!value) {
-            return;
-        }
-
-        if (value === '=') {
-            let params = output.innerHTML.split(' ').filter(x => x !== '');
-
-            if (params[2] !== undefined) {
-                result.innerHTML = operations[params[1]](params[0], params[2]);
-                return;
+        if (+currentSelection || currentSelection == '.' || currentSelection == '0') {
+            if (!operand) {
+                firstNumber += currentSelection;
+                expressionOutput.textContent += currentSelection;
+            } else {
+                secondNumber += currentSelection;
+                expressionOutput.textContent += currentSelection
             }
-
-            result.innerHTML = "NaN";
-            return;
+        } else if (calculator.hasOwnProperty(currentSelection)) {
+            operand = currentSelection;
+            expressionOutput.textContent += ` ${operand} `;
+        } else if (currentSelection == '=') {
+            if (+firstNumber && +secondNumber) { //check if both are valid nums
+                result.textContent = calculator[operand](+firstNumber, +secondNumber);
+            } else {
+                result.textContent = 'NaN';
+            }
         }
-
-        if (operators.includes(value)) {
-            output.innerHTML = output.innerHTML + ` ${value} `;
-            return;
-        }
-
-        output.innerHTML = output.innerHTML + value;
-    });
+    }))
 }
