@@ -8,7 +8,6 @@ The output should be printed on the console.
 
 */
 
-
 function calorieObject(input = []) {
     let obj = {};
 
@@ -21,7 +20,7 @@ function calorieObject(input = []) {
         }
     }
 
-    console.log(obj);
+    return obj;
 }
 
 calorieObject(['Yoghurt', '48', 'Rice', '138', 'Apple', '52'])
