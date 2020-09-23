@@ -15,5 +15,12 @@ class Extensible {
             }
         })
     }
-};
+}
 
+
+let obj1 = new Extensible();
+let obj2 = new Extensible();
+let obj3 = new Extensible();
+console.log(obj1.id);
+console.log(obj2.id);
+console.log(obj3.id);
