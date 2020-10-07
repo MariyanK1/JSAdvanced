@@ -1,3 +1,14 @@
+/*
+Write a timer that counts minutes and seconds. The user should be able to control it with buttons.
+Clicking [Start] starts the counter. Clicking [Stop] resets the timer back to zero.
+Only one of the buttons should be enabled at a time (you cannot stop the timer, if it is not running). 
+Submit only the stopwatch() function in judge.
+
+Input/Output
+There will be no input/output, your program should instead modify the DOM of the given HTML document.
+
+*/
+
 function stopwatch() {
     let buttons = document.querySelectorAll('button');
     const timer = document.getElementById('time');
