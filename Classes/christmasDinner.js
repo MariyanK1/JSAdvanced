@@ -61,7 +61,7 @@ class ChristmasDinner {
     }
 
     shopping(product) {
-        let [item, price] = product.join(' ').split(' ');
+        let [item, price] = product;
         price = Number(price);
 
         if (this.budget - price >= 0) {
