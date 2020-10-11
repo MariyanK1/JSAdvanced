@@ -40,7 +40,7 @@ class Bank {
             throw Error('We have no customer with this ID!');
         }
 
-        if (findCustomer.totalMoney <= 0) {
+        if (findCustomer.totalMoney < amount) {
             throw Error(`${findCustomer.firstName} ${findCustomer.lastName} does not have enough money to withdraw that amount!`)
         }
 
@@ -54,7 +54,7 @@ class Bank {
         let transaction = this.transactions.filter((x) => { return x.includes(info.firstName) });
         let reversed = transaction.reverse();
 
-        let result = `Bank name: ${this._bankName}\nCustomer name: ${info.firstName} ${info.lastName}\nCustomer ID: ${info.personalId}\nTotal Money:                            ${info.totalMoney}$\nTransactions:`;
+        let result = `Bank name: ${this._bankName}\nCustomer name: ${info.firstName} ${info.lastName}\nCustomer ID: ${info.personalId}\nTotal Money: ${info.totalMoney}$\nTransactions:`;
         let counter = reversed.length;
 
         reversed.forEach(x => result += '\n' + `${counter--}. ` + x);
@@ -62,7 +62,19 @@ class Bank {
         return result.trim();
     }
 }
-const bank = new Bank('Mariyan');
-console.log(bank.newCustomer({ firstName: 'Mariyan', lastName: 'Maksimov', personalId: 950527 }));
-console.log(bank.depositMoney(950527, 34242));
-console.log(bank.withdrawMoney(950527, 34000));
+let bank = new Bank('Softuni Bank');
+
+bank.newCustomer({ firstName: 'Svetlin', lastName: 'Nakov', personalId: 1111111 });
+
+
+bank.newCustomer({ firstName: 'Mihaela', lastName: 'Mileva', personalId: 3333333 });
+
+bank.depositMoney(1111111, 250);
+
+bank.depositMoney(1111111, 250);
+
+bank.depositMoney(3333333, 555);
+
+bank.withdrawMoney(1111111, 125);
+
+console.log(bank.customerInfo(1111111));
