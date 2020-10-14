@@ -61,9 +61,9 @@ function solve(car) {
     if (car.wheelsize % 2 === 0) {
         const size = car.wheelsize - 1;
 
-        obj['wheelsize'] = [size, size, size, size];
+        obj['wheels'] = [size, size, size, size];
     } else {
-        obj['wheelsize'] = [car.wheelsize, car.wheelsize, car.wheelsize, car.wheelsize]
+        obj['wheels'] = [car.wheelsize, car.wheelsize, car.wheelsize, car.wheelsize]
     }
 
     return obj;
