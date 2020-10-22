@@ -16,90 +16,107 @@ And last when you click the [Buy] button, you should empty the ul in My Products
 
 
 function solve() {
-
-   let $inputs = document.getElementById('add-new').querySelectorAll('input');
-   let $buttonAdd = document.getElementById('add-new').querySelector('button');
-   let $availableProducts = document.getElementById('products').querySelector('ul');
-   let $filterInput = document.getElementsByClassName('filter')[0].querySelector('input');
-   let $filterButton = document.getElementsByClassName('filter')[0].querySelector('button');
-   let $h1 = document.getElementsByTagName('h1')[1];
-   let $nameInput = $inputs[0];
-   let $quantityInput = $inputs[1];
-   let $priceInput = $inputs[2];
-   let $myProductsUl = document.getElementById('myProducts').querySelector('ul');
-   let $myProductsBtn = document.getElementById('myProducts').querySelector('button');
+   const $nameInput = document.querySelector('#add-new > input[type=text]:nth-child(2)');
+   const $quantityInput = document.querySelector('#add-new > input[type=text]:nth-child(3)');
+   const $priceInput = document.querySelector('#add-new > input[type=text]:nth-child(4)');
+   const $addButton = document.querySelector('#add-new > button');
+   const $availableProducts = document.querySelector('#products > ul');
+   const $filterInput = document.querySelector('#filter');
+   const $filterButton = document.querySelector('#products > div > button');
+   const $myProductsUl = document.querySelector('#myProducts > ul');
+   const $buyButton = document.querySelector('#myProducts > button');
+   const $totalPriceh1 = document.querySelector('body > h1:nth-child(4)');
 
 
-
-   $buttonAdd.addEventListener('click', e => {
+   $addButton.addEventListener('click', e => {
       e.preventDefault();
 
-      let $addToClientListBtn = document.createElement('button');
-      $addToClientListBtn.textContent = `Add to Client's List`;
-      let $listItem = document.createElement('li');
-      let $span = document.createElement('span');
-      $span.textContent = `${$nameInput.value}`;
-
-      let $strong1 = document.createElement('strong');
-      $strong1.textContent = `Available: ${Number($quantityInput.value).toFixed()}`;
+      const $listItem = createEl('li');
+      const $span = createEl('span', `${$nameInput.value}`);
+      const $strong = createEl('strong', `Available: ${$quantityInput.value}`);
+      const $div = createEl('div');
+      const $strong2 = createEl('strong', `${Number($priceInput.value).toFixed(2)}`);
+      const $addClientsListButton = createEl('button', `Add to Client's List`)
+      
+      $div.appendChild($strong2);
+      $div.appendChild($addClientsListButton);
 
       $listItem.appendChild($span);
-      $listItem.appendChild($strong1);
-
-      let $div = document.createElement('div');
-      let $strong2 = document.createElement('strong');
-      $strong2.textContent = `${Number($priceInput.value).toFixed(2)}`;
-
-      $div.appendChild($strong2);
-      $div.appendChild($addToClientListBtn);
+      $listItem.appendChild($strong);
       $listItem.appendChild($div);
 
       $availableProducts.appendChild($listItem);
 
-      $addToClientListBtn.addEventListener('click', e => {
+      $addClientsListButton.addEventListener('click', e => {
          e.preventDefault();
 
-         let quantity = Number($strong1.textContent.substring(11));
+         let availableQuantity = Number($strong.textContent.replace('Available: ', ''));
+         let total = `${Number($priceInput.value).toFixed(2)}`;
 
-         let total = `${Number($priceInput.value)}`;
+         const $li = createEl('li');
+         const $strong3 = createEl('strong', `${total}`);
 
-         let $li = document.createElement('li');
-         let $strong = document.createElement('strong');
-
-         $strong.textContent = `${(+total).toFixed(2)}`;
-         $li.innerHTML = `${$nameInput.value}`;
-         $li.appendChild($strong);
+         $li.innerHTML = $nameInput.value;
+         $li.appendChild($strong3);
          $myProductsUl.appendChild($li);
+         
+         availableQuantity -= 1;
 
-         $strong1.textContent = `Available: ${quantity - 1}`;
-         quantity -= 1;
+         $strong.textContent = `Available: ${availableQuantity}`;
 
-         if (!quantity) {
+         if (!availableQuantity) {
             e.target.parentNode.parentNode.remove();
          }
 
-         let totalPrice = $h1.innerHTML.substring(13);
+         let totalPrice = Number($totalPriceh1.textContent.replace('Total Price: ', ``));
+         totalPrice += Number(total);
+         
+         $totalPriceh1.innerHTML = `Total Price: ${Number(totalPrice).toFixed(2)}`
+      });
 
-         $h1.innerHTML = `Total Price: ${(Number(total) + Number(totalPrice)).toFixed(2)}`
-      })
 
-      $filterButton.addEventListener('click', (e) => {
-         e.preventDefault();
-
-         Array.from($availableProducts.children).forEach(el => {
-            if (el.firstChild.textContent.toLocaleLowerCase().includes($filterInput.value.toLocaleLowerCase())) {
-               el.style.display = 'block';
-            } else {
-               el.style.display = 'none';
-            }
-         })
-
-      })
 
 
    })
-   $myProductsBtn.addEventListener('click', e => {
-      $h1.innerHTML = 'Total Price: 0.00';
+
+   $buyButton.addEventListener('click', () => {
+      $totalPriceh1.innerHTML = `Total Price: 0.00`;
       $myProductsUl.innerHTML = '';
    })
+
+   $filterButton.addEventListener('click', e => {
+      e.preventDefault();
+
+      let list = $availableProducts.children;
+
+      Array
+         .from(list)
+         .forEach((el) => {
+
+            if (el
+               .firstChild
+               .textContent
+               .toLocaleLowerCase()
+               .includes($filterInput.value.toLocaleLowerCase())
+            ) {
+               el.style = 'block';
+            }
+
+            else {
+               el.style.display = 'none';
+            }
+         });
+   })
+
+
+
+   function createEl(tag, text) {
+      let e = document.createElement(tag);
+
+      if (text) {
+         e.textContent = text;
+      }
+
+      return e;
+   }
 }
