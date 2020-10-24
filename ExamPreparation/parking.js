@@ -86,10 +86,10 @@ class Parking {
 
     addCar(carModel, carNumber) {
         if (this.capacity === this.vehicles.length) {
-            throw Error("Not enough parking space.")
+            throw Error("Not enough parking space.");
         } else {
             this.vehicles.push({ carModel, carNumber, payed: false });
-            return `The ${carModel}, with a registration number ${carNumber}, parked.`
+            return `The ${carModel}, with a registration number ${carNumber}, parked.`;
         }
     }
 
@@ -97,24 +97,24 @@ class Parking {
         let find = this.vehicles.find((o) => { return o.carNumber === carNumber });
 
         if (!find) {
-            throw Error("The car, you're looking for, is not found.")
+            throw Error("The car, you're looking for, is not found.");
         }
 
         if (!find.payed) {
-            throw Error(`${carNumber} needs to pay before leaving the parking lot.`)
+            throw Error(`${carNumber} needs to pay before leaving the parking lot.`);
         }
 
         let i = this.vehicles.indexOf(find);
         this.vehicles.splice(i, 1);
 
-        return `${carNumber} left the parking lot.`
+        return `${carNumber} left the parking lot.`;
     }
 
     pay(carNumber) {
         let c = this.vehicles.find((o) => { return o.carNumber === carNumber });
 
         if (!c) {
-            throw Error(`${carNumber} is not in the parking lot.`)
+            throw Error(`${carNumber} is not in the parking lot.`);
         }
 
         if (c.payed) {
@@ -127,14 +127,14 @@ class Parking {
 
     getStatistics(carNumber) {
         if (!carNumber) {
-            let result = [`The Parking Lot has ${this.capacity - this.vehicles.length} empty spots left.`,]
+            let result = [`The Parking Lot has ${this.capacity - this.vehicles.length} empty spots left.`];
             let sorted = this.vehicles.sort((a, b) => a.carModel.localeCompare(b.carModel));
 
             for (const s of sorted) {
                 if (s.payed) {
-                    result.push(`${s.carModel} == ${s.carNumber} - Has payed`)
+                    result.push(`${s.carModel} == ${s.carNumber} - Has payed`);
                 } else {
-                    result.push(`${s.carModel} == ${s.carNumber} - Not payed`)
+                    result.push(`${s.carModel} == ${s.carNumber} - Not payed`);
                 }
             }
             return result.join('\n')
