@@ -122,12 +122,12 @@ function solve() {
                 this.tasks.push({ id, taskName, priority });
             }
 
-            return `Task id ${id}, with ${priority} priority, has been added.`
+            return `Task id ${id}, with ${priority} priority, has been added.`;
         }
 
         doTask() {
             if (this.tasks.length === 0) {
-                return `${this.firstName}, you have finished all your tasks. You can rest now.`
+                return `${this.firstName}, you have finished all your tasks. You can rest now.`;
             } else {
                 let task = this.tasks.shift();
                 return task.taskName;
@@ -136,7 +136,7 @@ function solve() {
 
 
         getSalary() {
-            return `${this.firstName} ${this.lastName} has a salary of: ${this.baseSalary}`
+            return `${this.firstName} ${this.lastName} has a salary of: ${this.baseSalary}`;
         }
 
         reviewTasks() {
@@ -144,10 +144,10 @@ function solve() {
 
             while (this.tasks.length > 0) {
                 let r = this.tasks.shift();
-                result.push(`${r.id}: ${r.taskName} - ${r.priority}`)
+                result.push(`${r.id}: ${r.taskName} - ${r.priority}`);
             }
 
-            return result.join('\n')
+            return result.join('\n');
         }
     }
 
@@ -190,7 +190,6 @@ function solve() {
                 this.tasks.unshift(find);
                 this.tasks.splice(i, 1);
                 return 'high';
-
             }
 
         }
