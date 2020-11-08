@@ -1,3 +1,45 @@
+/*
+⦁	Each catch should have:
+⦁	angler - string representing the name of the person who caught the fish
+⦁	weight - floating-point number representing the weight of the fish in kilograms
+⦁	species - string representing the name of the fish species
+⦁	location - string representing the location where the fish was caught
+⦁	bait - string representing the bait used to catch the fish
+⦁	captureTime - integer number representing the time needed to catch the fish in minutes
+
+
+HTML Template
+Use the skeleton from the provided resources.
+Attach handlers to the [Load], [Update], [Delete] and [Add] buttons, which make the appropriate GET, PUT, DELETE and POST requests. 
+
+You are given an example catch in the template to show you where and how to insert the catches.
+
+Create the following REST services to access your data:
+⦁	List All Catches
+⦁	Endpoint - https://fisher-game.firebaseio.com/catches.json
+⦁	Method: GET
+⦁	Returns (Object of objects)
+⦁	Create a New Catch
+⦁	Endpoint: https://fisher-game.firebaseio.com/catches.json
+⦁	Method: POST
+⦁	Request body (JSON): {"angler":"…", "weight":…, "species":"…", "location":"…", "bait":"…", "captureTime":…}
+⦁	Update a Catch
+⦁	Endpoint: https://fisher-game.firebaseio.com/catches/{catchId}.json
+⦁	Method: PUT
+⦁	Request body (JSON): {"angler":"…", "weight":…, "species":"…", "location":"…", "bait":"…", "captureTime":…}
+⦁	Delete a Catch
+⦁	Endpoint: https://fisher-game.firebaseio.com/catches/{catchId}.json
+⦁	Method: DELETE
+
+
+⦁	Pressing the [Load] button should list all catches. 
+⦁	Pressing the [Update] button should send a PUT request, updating the catch in firebase. 
+⦁	Pressing the [Delete] button should delete the catch both from firebase and from the page. 
+⦁	Pressing the [Add] button should submit a new catch with the values of the inputs in the fieldset with id="addFrom".
+
+
+*/
+
 function attachEvents() {
     const $buttonAdd = document.querySelector('button.add');
     const $buttonLoad = document.querySelector('button.load');
