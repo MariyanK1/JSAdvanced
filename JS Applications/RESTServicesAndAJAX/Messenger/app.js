@@ -26,13 +26,9 @@ function attachEvents() {
     const url = 'https://rest-messanger.firebaseio.com/messanger.json';
 
 
-    $refreshButton.addEventListener('click', () => {
-        GET(url);
-    })
+    $refreshButton.addEventListener('click', GET(url));
 
-    $sendButton.addEventListener('click', () => {
-        POST(url);
-    })
+    $sendButton.addEventListener('click', POST(url));
 
 
     function POST(url) {
