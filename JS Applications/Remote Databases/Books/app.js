@@ -1,77 +1,149 @@
 function solve() {
     const url = 'https://softuniexercise-a2960.firebaseio.com/Books.json';
-    const $submitButton = document.querySelector('body > form:nth-child(3) > button:nth-child(8)');
-    const $loadBooksButton = document.querySelector('#loadBooks');
-    const $titleInput = document.querySelector('#title');
-    const $authorInput = document.querySelector('#author');
-    const $isbnInput = document.querySelector('#isbn');
-    const $tableBody = document.querySelector('body > table:nth-child(2) > tbody:nth-child(2)');
+    const $domElements = {
+        loadButton: () => document.querySelector('#loadBooks'),
+        submitButton: () => document.querySelector('body > form:nth-child(3) > button:nth-child(8)'),
+        createTitleInput: () => document.querySelector('#title'),
+        authorInput: () => document.querySelector('#author'),
+        isbnInput: () => document.querySelector('#isbn'),
+        bookContainer: () => document.querySelector('tbody'),
+        editTitleInput: () => document.querySelector('#edit-title'),
+        editAuthorInput: () => document.querySelector('#edit-author'),
+        editIsbnInput: () => document.querySelector('#edit-isbn'),
+        editForm: () => document.querySelector('#edit-form'),
+        editBtn: () => document.querySelector('#edit-form > button')
 
+    }
 
-    //--The value of isbn's input tag has a typo--//
+    window.onload = $domElements.bookContainer().innerHTML = '';
 
-    $submitButton.addEventListener('click', (e) => {
+    $domElements.loadButton().addEventListener('click', fetchAllBooks);
+
+    $domElements.submitButton().addEventListener('click', submitBooks);
+
+    $domElements.editBtn().addEventListener('click', patchBook);
+
+    function deleteBook(e) {
+        const id = e.target.classList.value;
+        const newUrl = `https://softuniexercise-a2960.firebaseio.com/Books/${id}.json`;
+
+        const body = {
+            method: 'DELETE'
+        }
+        fetch(newUrl, body).then(fetchAllBooks)
+
+    }
+
+    function patchBook(e) {
         e.preventDefault();
+        const id = e.target.classList.value;
+        const newUrl = `https://softuniexercise-a2960.firebaseio.com/Books/${id}.json`;
 
-        fetch(url, {
-            method: "POST",
-            body: JSON.stringify({ "ISBN": $isbnInput.value, "author": $authorInput.value, "title": $titleInput.value })
-        }).then(
-            $isbnInput.value = '',
-            $authorInput.value = '',
-            $titleInput.value = ''
-        )
-            .catch(e => alert(e))
-    })
-
-    $loadBooksButton.addEventListener('click', () => {
-        if ($tableBody.innerHTML !== '') {
-            $tableBody.innerHTML = '';
+        const body = {
+            method: 'PATCH',
+            body: JSON.stringify({
+                title: $domElements.editTitleInput().value,
+                author: $domElements.editAuthorInput().value,
+                ISBN: $domElements.editIsbnInput().value
+            })
         }
 
+        fetch(newUrl, body)
+            .then(r => r.json())
+            .then(fetchAllBooks, $domElements.editForm().style.display = 'none');
+    }
 
+    function submitBooks(e) {
+        e.preventDefault();
+
+        const $titleInputValue = $domElements.createTitleInput().value;
+        const $authorInputValue = $domElements.authorInput().value;
+        const $isbnInputValue = $domElements.isbnInput().value;
+
+        const obj = {
+            method: 'POST',
+            body: JSON.stringify({ "title": $titleInputValue, "author": $authorInputValue, "ISBN": $isbnInputValue })
+        }
+
+        fetch(url, obj)
+            .then(fetchAllBooks(url))
+            .catch(e => console.log(e));
+    }
+
+    function fetchAllBooks() {
         fetch(url)
-            .then(x => x.json())
-            .then(data => {
-                Object.entries(data).forEach(entry => {
-                    const { ISBN, author, title } = entry[1];
+            .then(res => res.json())
+            .then(renderBooks)
+            .catch(error => alert(error));
+    }
 
-                    const $tr = createEl('tr');
-                    const $tdTitle = createEl('td', title);
-                    const $tdAuthor = createEl('td', author);
-                    const $tdISBN = createEl('td', ISBN);
-                    const $tdButtons = createEl('td');
-                    const $deleteBtn = createEl('button', 'Delete');
-                    const $editBtn = createEl('button', 'Edit');
-
-                    $tr.appendChild($tdTitle);
-                    $tr.appendChild($tdAuthor);
-                    $tr.appendChild($tdISBN);
-
-                    $tdButtons.appendChild($editBtn);
-                    $tdButtons.appendChild($deleteBtn);
-
-                    $tr.appendChild($tdButtons);
-
-                    $tableBody.appendChild($tr);
-
-                    $editBtn.addEventListener('click', () => {
-
-                    })
-                })
+    function editBooks(e) {
+        e.preventDefault();
+        const id = e.target.classList.value;
+        $domElements.editBtn().classList = id;
+        const newUrl = `https://softuniexercise-a2960.firebaseio.com/Books/${id}.json`
+        $domElements.editForm().style.display = 'block';
+        fetch(newUrl)
+            .then(r => r.json())
+            .then(({ title, author, ISBN }) => {
+                $domElements.editIsbnInput().value = ISBN;
+                $domElements.editTitleInput().value = title;
+                $domElements.editAuthorInput().value = author;
             })
-            .catch(e => alert(e));
-    })
 
-    function createEl(type, text) {
-        const el = document.createElement(type);
+        scrollBy(0, 10000);
+    }
+
+    function renderBooks(data) {
+        const container = $domElements.bookContainer();
+
+        $domElements.bookContainer().innerHTML = ''
+
+        Object
+            .keys(data)
+            .forEach(id => {
+                const { ISBN, author, title } = data[id];
+                const tableRow = createElement('tr', null, null, null,
+                    createElement('td', title),
+                    createElement('td', author),
+                    createElement('td', ISBN),
+                    createElement('td', null, null, null,
+                        createElement('button', 'Edit', { 'class': id }, { click: editBooks }),
+                        createElement('button', 'Delete', { 'class': id }, { click: deleteBook })));
+
+                container.appendChild(tableRow);
+            })
+    }
+
+    function createElement(element, text, attr, event, ...children) {
+        const el = document.createElement(element);
 
         if (text) {
             el.textContent = text;
         }
 
+        if (attr) {
+            Object.entries(attr).forEach(([attrKey, attrValue]) => {
+                el.setAttribute(attrKey, attrValue);
+            });
+        }
+
+        if (event) {
+            Object.entries(event).forEach(([name, handler]) => {
+                el.addEventListener(name, handler);
+            });
+        }
+
+
+        if (children) {
+            children.forEach(child => {
+                el.appendChild(child);
+            });
+        }
+
         return el;
     }
 }
+
 
 solve()
