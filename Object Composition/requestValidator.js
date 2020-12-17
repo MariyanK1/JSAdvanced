@@ -37,7 +37,7 @@ function http(request) {
         throw new Error(`Invalid request header: Invalid Version`);
     }
 
-    if (request.message === '') {
+    if (!request.message) {
         return request;
     }
 
